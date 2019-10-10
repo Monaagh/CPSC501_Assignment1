@@ -1,0 +1,9 @@
+101,mona,0
+110,aida,12
+102,adel,54
+111,adel,5
+104,mona,10
+115,sarv,23
+117,mon,0
+110,ben,15
+101,marjan,0
