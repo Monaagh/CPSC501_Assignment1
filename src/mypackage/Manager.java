@@ -58,7 +58,7 @@ public class Manager extends DomainObject{
 				} else if (number == 3) {
 					rentMovie();	
 				} else if (number == 4) {
-					cHandler.getStatement(reader);	
+					cHandler.statement(reader);	
 				} else if (number == 5) {
 					getCustomerWithOverdue();
 				} else if (number == 6) {

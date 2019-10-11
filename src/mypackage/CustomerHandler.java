@@ -33,14 +33,14 @@ public class CustomerHandler {
 	}
 	
 	
-	public void getStatement(BufferedReader reader) throws IOException {
+	public void statement(BufferedReader reader) throws IOException {
 		Customer customer = null;
 		try {
 			while (true) {
 				System.out.println("Enter customer's name:");
 				customerName = reader.readLine();
 				if (!customerName.isEmpty() || customerName != null) {
-					customer = searchCustomerStatement(customerName.toLowerCase());
+					customer = searchCustomer(customerName.toLowerCase());
 					break;
 				}			
 			}
@@ -49,7 +49,7 @@ public class CustomerHandler {
 		}
 		
 		if (customer != null) {
-			String statement = customer.statement();
+			String statement = customer.getStatement();
 			System.out.println(statement);
 		}
 			System.out.println("-----------------------------------------------------------------");
@@ -58,7 +58,7 @@ public class CustomerHandler {
 			System.out.println("Please choose from the following commands by entering the number");
 	}
 	
-	public Customer searchCustomerStatement(String cName) throws IOException {
+	public Customer searchCustomer(String cName) throws IOException {
 		Customer customer = null;
 		String fileName = "customer.txt";
 		BufferedReader customerReader = new BufferedReader(new FileReader(fileName));

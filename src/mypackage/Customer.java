@@ -27,7 +27,7 @@ public class Customer extends DomainObject
         this.number = number;
         this.email = email;
     }
-    public String statement() throws NumberFormatException, IOException {
+    public String getStatement() throws NumberFormatException, IOException {
         String header = "Rental Record for " + name() + ":\n";
 
         String result = getAmountOwed(header);

@@ -38,7 +38,7 @@ public class TestCustomer {
 		Customer john = new Customer("John Doe", "403", "John@gmail.com");
 		Rental rental = new Rental(tape1, john, 23);
 		john.addRental(rental);
-		john.statement();
+		john.getStatement();
 		
 		assertEquals(33.5, john.totalAmount, 0.0001);
 		//assertNull(tape.movie());
@@ -50,7 +50,7 @@ public class TestCustomer {
 		Customer john = new Customer("John Doe", "403", "John@gmail.com");
 		Rental rental = new Rental(tape1, john, 0);
 		john.addRental(rental);
-		john.statement();
+		john.getStatement();
 		
 		assertEquals(2, john.totalAmount, 0.0001);
 
@@ -62,7 +62,7 @@ public class TestCustomer {
 		Customer john = new Customer("John Doe", "403", "John@gmail.com");
 		Rental rental = new Rental(tape1, john, -2);
 		john.addRental(rental);
-		john.statement();
+		john.getStatement();
 		
 		assertEquals(2, john.totalAmount, 0.0001);
 
@@ -76,7 +76,7 @@ public class TestCustomer {
 		Rental rental2 = new Rental(tape2, john, 0);
 		john.addRental(rental1);
 		john.addRental(rental2);
-		john.statement();
+		john.getStatement();
 		
 		assertEquals(35.5, john.totalAmount, 0.0001);
 
@@ -88,7 +88,7 @@ public class TestCustomer {
 		Customer john = new Customer("John Doe", "403", "John@gmail.com");
 		//Rental rental1 = new Rental(tape1, john, 23);
 		//john.addRental(rental1);
-		john.statement();		
+		john.getStatement();		
 		assertEquals(0, john.totalAmount, 0.0001);
 
 	}
