@@ -11,6 +11,7 @@ public class CustomerHandler {
 	String phoneNumber = null;
 	String email = null;
 	String command;
+	Customer customer = null;
 	
 	public CustomerHandler() {
 		customerName = null;
@@ -23,10 +24,14 @@ public class CustomerHandler {
 		phoneNumber = getCustomerPhone(reader);
 		email = getCustomerEmail(reader);	
 		
-		Customer customer = new Customer(customerName, phoneNumber, email);
+		customer = new Customer(customerName, phoneNumber, email);
 		customer.persist();
 		System.out.println("Customer added to the database");
 		System.out.println("-----------------------------------------------------------------");
+		//printInstruction(reader);
+	}
+
+	public void printInstruction(BufferedReader reader) throws IOException {
 		System.out.println("Please press a key to continue.");
 		command = reader.readLine();
 		System.out.println("Please choose from the following commands by entering the number");
@@ -56,16 +61,14 @@ public class CustomerHandler {
 			System.out.println(statement);
 		}
 			System.out.println("-----------------------------------------------------------------");
-			System.out.println("Please press a key to continue.");
-			command = reader.readLine();
-			System.out.println("Please choose from the following commands by entering the number");
+			printInstruction(reader);
 	}
 	
-	public Customer searchCustomer(String cName, BufferedReader reader) throws IOException {
+	public Customer searchCustomer(String cName, BufferedReader customerReader) throws IOException {
 		Customer customer = null;
 		String line;
 		String[] data;
-		while ((line = reader.readLine()) != null) {
+		while ((line = customerReader.readLine()) != null) {
 			data = line.split(",");
 			if (data[0].equals(cName)) {
 				customer = new Customer(data[0], data[1], data[2]);
@@ -79,36 +82,8 @@ public class CustomerHandler {
 		return customer;
 	}
 	
-	public Customer searchCustomer2(String cName, BufferedReader reader) throws IOException {
-		Customer customer = null;
-		BufferedReader customerReader = getCustomerReader();
-		String line;
-		String[] data;
-		while ((line = customerReader.readLine()) != null) {
-			data = line.split(",");
-			if (data[0].equals(cName)) {
-				customer = new Customer(data[0], data[1], data[2]);
-			}
-				
-		}
-		
-		if (customer == null) {
-			System.out.println("This customer is not in the database, please enter following information to add the customer to the system:");
-			String customerName = cName;
-			
-			String phoneNumber = getCustomerPhone(reader);
-			
-			String email  = getCustomerEmail(reader);
-				
-			customer = new Customer(customerName, phoneNumber, email);
-			customer.persist();
-			System.out.println("Customer added to the database");
-			System.out.println("-----------------------------------------------------------------");
-		}
-		return customer;
-	}
 
-	private BufferedReader getCustomerReader() throws FileNotFoundException {
+	public BufferedReader getCustomerReader() throws FileNotFoundException {
 		String fileName = "customer.txt";
 		BufferedReader customerReader = new BufferedReader(new FileReader(fileName));
 		return customerReader;

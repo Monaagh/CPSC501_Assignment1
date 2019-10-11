@@ -52,7 +52,8 @@ public class Manager extends DomainObject{
 				number = Integer.parseInt(command);
 		
 				if (number == 1) { 
-					cHandler.addCustomer(reader);		
+					cHandler.addCustomer(reader);
+					cHandler.printInstruction(reader);
 				} else if (number == 2) {
 					addMovie();		
 				} else if (number == 3) {
@@ -161,7 +162,7 @@ public class Manager extends DomainObject{
 			tapeSN = data[0];
 			customerName = data[1];
 			if (rentDays > 10) {
-				customer = cHandler.searchCustomer2(customerName, reader);
+				customer = cHandler.searchCustomer(customerName, cHandler.getCustomerReader());
 				tape = searchTape(tapeSN);
 				nameCap = customer.name().substring(0,1).toUpperCase() + customer.name().substring(1);
 				int overdue = rentDays - 10;
@@ -184,17 +185,26 @@ public class Manager extends DomainObject{
 
 
 	private void rentMovie() throws IOException {
-		try {
-			while (true) {
-				System.out.println("Enter customer's name:");
-				String customerName = reader.readLine();
-				if (!customerName.isEmpty()) {
-					customer = cHandler.searchCustomer2(customerName.toLowerCase(), reader);
-					break;
-				}			
+		customer = null;
+		while (customer == null) {
+			try {
+				while (true) {
+					System.out.println("Enter customer's name:");
+					String customerName = reader.readLine();
+					if (!customerName.isEmpty()) {
+						customer = cHandler.searchCustomer(customerName.toLowerCase(), cHandler.getCustomerReader());
+						break;
+					}			
+				}
+			} catch (IOException e) {
+					System.out.println("Exception:" + e);
 			}
-		} catch (IOException e) {
-				System.out.println("Exception:" + e);
+			
+			if (customer == null) {
+				System.out.println("You need to first add the customer to database");
+				cHandler.addCustomer(reader);
+				System.out.println("Now you can rent a movie");
+			}
 		}
 		
 		try {
