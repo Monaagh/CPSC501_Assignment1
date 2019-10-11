@@ -107,6 +107,11 @@ public class Manager extends DomainObject{
 			}
 		} 
 		
+		printInstruction();
+	}
+
+
+	private void printInstruction() throws IOException {
 		System.out.println("Please press a key to continue.");
 		command = reader.readLine();
 		System.out.println("Please choose from the following commands by entering the number");
@@ -118,19 +123,11 @@ public class Manager extends DomainObject{
 		customer = null;
 		tape = null;
 		String tapeSN;
+		String customerName =null; 
+		
 		while (customer == null) {
-			try {
-				while (true) {
-					System.out.println("Enter customer's name:");
-					String customerName = reader.readLine();
-					if (!customerName.isEmpty()) {
-						customer = cHandler.searchCustomer(customerName.toLowerCase(), cHandler.getCustomerReader());
-						break;
-					}			
-				}
-			} catch (IOException e) {
-					System.out.println("Exception:" + e);
-			}
+			customerName = cHandler.getCustomerName(reader);
+			customer = cHandler.searchCustomer(customerName.toLowerCase(), cHandler.getCustomerReader());
 			
 			if (customer == null) {
 				System.out.println("You need to first add the customer to database");
@@ -138,19 +135,10 @@ public class Manager extends DomainObject{
 				System.out.println("Now you can rent a movie");
 			}
 		}
+			
 		while (tape == null) {
-			try {
-				while (true) {
-					System.out.println("Enter tape's serial number:");
-					tapeSN = reader.readLine();
-					if (!tapeSN.isEmpty()) {
-						tape = mHandler.searchTape(tapeSN, mHandler.getMovieReader());
-						break;
-					}			
-				}
-			} catch (IOException e) {
-					System.out.println("Exception:" + e);
-			}
+			tapeSN = mHandler.getMovieSerialNumber(reader);
+			tape = mHandler.searchTape(tapeSN, mHandler.getMovieReader());
 			
 			if (tape == null) {
 				System.out.println("You need to first add the movie to the database");
@@ -163,9 +151,7 @@ public class Manager extends DomainObject{
 		rental.persist();
 		System.out.println("Mission accomplished! Rental information added to the database");
 		System.out.println("-----------------------------------------------------------------");
-		System.out.println("Please press a key to continue.");
-		command = reader.readLine();
-		System.out.println("Please choose from the following commands by entering the number");
+		printInstruction();
 	}
 			
 
