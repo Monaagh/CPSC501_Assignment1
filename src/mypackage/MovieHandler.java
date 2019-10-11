@@ -5,11 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class MovieHandler {
+public class MovieHandler extends Handler {
 	String movieName;
 	int movieCode;
 	String tapeSN;
-	String command;
 	
 	
 	public MovieHandler() {
@@ -33,16 +32,10 @@ public class MovieHandler {
 		//printInstruction(reader);
 	}
 
-	public void printInstruction(BufferedReader reader) throws IOException {
-		System.out.println("Please press a key to continue.");
-		command = reader.readLine();
-		System.out.println("Please choose from the following commands by entering the number");
-	}
-
 	public Tape searchTape(String tapeSN, BufferedReader movieReader) throws IOException {
 		Tape tape = null;
 		Movie movie = null;
-		String sn;
+		//String sn;
 		
 		String line;
 		String[] data;

@@ -6,11 +6,11 @@ package mypackage;
 
 import java.io.*;
 import mypackage.Customer;
-public class CustomerHandler {
+public class CustomerHandler extends Handler {
 	String customerName;
 	String phoneNumber;
 	String email;
-	String command;
+
 	
 	
 	public CustomerHandler() {
@@ -31,13 +31,6 @@ public class CustomerHandler {
 		//printInstruction(reader);
 	}
 
-	public void printInstruction(BufferedReader reader) throws IOException {
-		System.out.println("Please press a key to continue.");
-		command = reader.readLine();
-		System.out.println("Please choose from the following commands by entering the number");
-	}
-	
-	
 	public void statement(BufferedReader reader) throws IOException {
 		Customer customer = null;
 		BufferedReader customerReader = getCustomerReader();
@@ -140,7 +133,6 @@ public class CustomerHandler {
 		} catch (IOException e) {
 				System.out.println("Exception:" + e);
 		}
-
 		return email;
 	}
 }
