@@ -12,42 +12,41 @@ import org.junit.Before;
 import org.junit.After;
 import static org.junit.Assert.fail;
 
-public class TestManager {
-	Manager manager;
+public class TestCustomerHandler {
+	CustomerHandler chandler;
 	
 	@Before
 	public void setUp() {
-		manager = new Manager();
+		chandler = new CustomerHandler();
 	}
 	
 	@Test
-	public void testGetMovieName() {
-		String name = "Harry Poter";
+	public void testGetCustomerName() {
+		String name = "adam";
 		InputStream stream = new ByteArrayInputStream(name.getBytes(StandardCharsets.UTF_8));
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-		String expectedName = manager.getMovieName(reader);
+		String expectedName = chandler.getCustomerName(reader);
 		assertEquals(expectedName, name);
 	}
 	
 	@Test
-	public void testGetMovieSerialNumber() {
-		String sn = "110";
-		InputStream stream = new ByteArrayInputStream(sn.getBytes(StandardCharsets.UTF_8));
+	public void testGetCustomerPhone() {
+		String number = "1234567";
+		InputStream stream = new ByteArrayInputStream(number.getBytes(StandardCharsets.UTF_8));
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-		String expectedSN = manager.getMovieSerialNumber(reader);
-		assertEquals(expectedSN, sn);
+		String expectedNumber = chandler.getCustomerPhone(reader);
+		assertEquals(expectedNumber, number);
 	}
 	
 	@Test
-	public void testGetMoviePriceCode() {
-		String code = "0";
-		InputStream stream = new ByteArrayInputStream(code.getBytes(StandardCharsets.UTF_8));
+	public void testGetCustomerEmail() {
+		String email = "adam@gmail.com";
+		InputStream stream = new ByteArrayInputStream(email.getBytes(StandardCharsets.UTF_8));
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-		int expectedCode = manager.getMoviePriceCode(reader);
-		assertEquals(expectedCode, Integer.parseInt(code));
+		String expectedEmail = chandler.getCustomerEmail(reader);
+		assertEquals(expectedEmail, email);
 	}
-	
-	
+		
 	@After
 	public void testAfter() {
 		

@@ -14,16 +14,18 @@ public class Manager extends DomainObject{
 	public BufferedReader fileReader;
 	String command = null;
 	int number = 0;
-	String customerName = null;
-	String phoneNumber = null;
-	String email = null;
+	//String customerName = null;
+	//String phoneNumber = null;
+	//String email = null;
 	String movieName = null;
 	int movieCode = 0;
 	String tapeSN = null;
 	BufferedReader reader;
+	CustomerHandler cHandler;
 	
 	public Manager() {
 		reader = new BufferedReader(new InputStreamReader(System.in));
+		cHandler = new CustomerHandler();
 	}
 	
 	
@@ -50,13 +52,13 @@ public class Manager extends DomainObject{
 				number = Integer.parseInt(command);
 		
 				if (number == 1) { 
-					addCustomer();		
+					cHandler.addCustomer(reader);		
 				} else if (number == 2) {
 					addMovie();		
 				} else if (number == 3) {
 					rentMovie();	
 				} else if (number == 4) {
-					getStatement();	
+					cHandler.getStatement(reader);	
 				} else if (number == 5) {
 					getCustomerWithOverdue();
 				} else if (number == 6) {
@@ -70,73 +72,7 @@ public class Manager extends DomainObject{
 		}
 	}
 	
-	private void addCustomer() throws IOException {
-		customerName = getCustomerName(reader);
-		phoneNumber = getCustomerPhone(reader);
-		email = getCustomerEmail(reader);	
-		
-		customer = new Customer(customerName, phoneNumber, email);
-		customer.persist();
-		System.out.println("Customer added to the database");
-		System.out.println("-----------------------------------------------------------------");
-		System.out.println("Please press a key to continue.");
-		command = reader.readLine();
-		System.out.println("Please choose from the following commands by entering the number");
-	}
-
-	public String getCustomerName(BufferedReader reader) {
-		String name = null;
-		try {
-			while (true) {
-				System.out.println("Enter customer's name:");
-				name = reader.readLine();
-				name = name.toLowerCase();
-				if (!name.isEmpty()) {
-					break;
-				}
-			}
-		} catch (IOException e) {
-			System.out.println("Exception:" + e);
-		} 
-		
-		return name;
-	}
 	
-	public String getCustomerPhone(BufferedReader reader) {
-		String number = null;
-		try {
-			while (true) {
-				System.out.println("Enter customer's phone:");
-				number = reader.readLine();
-				if (!number.isEmpty()) {
-					break;
-				}
-			}
-		} catch (IOException e) {
-				System.out.println("Exception:" + e);
-		}
-		
-		return number;
-	}
-	
-	
-	
-	public String getCustomerEmail(BufferedReader reader) {
-		String email = null;
-		try {
-			while (true) {
-				System.out.println("Enter customer's email:");
-				email = reader.readLine();
-				if (!email.isEmpty()) {
-					break;
-				}
-			}
-		} catch (IOException e) {
-				System.out.println("Exception:" + e);
-		}
-
-		return email;
-	}
 	
 	private void addMovie() throws IOException {
 		movieName = getMovieName(reader);		
@@ -212,6 +148,7 @@ public class Manager extends DomainObject{
 
 	private void getCustomerWithOverdue() throws FileNotFoundException, IOException {
 		String fileName = "rental.txt";
+		String customerName;
 		fileReader = new BufferedReader(new FileReader(fileName));
 		String line;
 		String[] data;
@@ -242,37 +179,14 @@ public class Manager extends DomainObject{
 	}
 
 
-	private void getStatement() throws IOException {
-		try {
-			while (true) {
-				System.out.println("Enter customer's name:");
-				customerName = reader.readLine();
-				if (!customerName.isEmpty() || customerName != null) {
-					customer = searchCustomerStatement(customerName.toLowerCase());
-					break;
-				}			
-			}
-		} catch (IOException e) {
-				System.out.println("Exception:" + e);
-		}
-		
-		//System.out.println(customer.name());
-		if (customer != null) {
-			String statement = customer.statement();
-			System.out.println(statement);
-		}
-			System.out.println("-----------------------------------------------------------------");
-			System.out.println("Please press a key to continue.");
-			command = reader.readLine();
-			System.out.println("Please choose from the following commands by entering the number");
-	}
+	
 
 
 	private void rentMovie() throws IOException {
 		try {
 			while (true) {
 				System.out.println("Enter customer's name:");
-				customerName = reader.readLine();
+				String customerName = reader.readLine();
 				if (!customerName.isEmpty()) {
 					customer = searchCustomer(customerName.toLowerCase());
 					break;
@@ -321,11 +235,11 @@ public class Manager extends DomainObject{
 		
 		if (customer == null) {
 			System.out.println("This customer is not in the database, please enter following information to add the customer to the system:");
-			customerName = cName;
+			String customerName = cName;
 			
-			phoneNumber = getCustomerPhone(reader);
+			String phoneNumber = cHandler.getCustomerPhone(reader);
 			
-			email = getCustomerEmail(reader);
+			String email = cHandler.getCustomerEmail(reader);
 				
 			customer = new Customer(customerName, phoneNumber, email);
 			customer.persist();
@@ -335,27 +249,6 @@ public class Manager extends DomainObject{
 		return customer;
 	}
 	
-	public Customer searchCustomerStatement(String cName) throws IOException {
-		Customer customer = null;
-		String fileName = "customer.txt";
-		BufferedReader customerReader = new BufferedReader(new FileReader(fileName));
-		String line;
-		String[] data;
-		while ((line = customerReader.readLine()) != null) {
-			data = line.split(",");
-			if (data[0].equals(cName)) {
-				customer = new Customer(data[0], data[1], data[2]);
-			}
-				
-		}
-		//fileReader.close();
-		
-		if (customer == null) {
-			System.out.println("Opps! This customer is not in the database");
-		}
-			
-		return customer;
-	}
 	
 	public Tape searchTape(String tapeSN) throws IOException {
 		Tape tape = null;
