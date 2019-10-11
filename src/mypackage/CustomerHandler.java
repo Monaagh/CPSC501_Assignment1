@@ -35,8 +35,7 @@ public class CustomerHandler {
 	
 	public void statement(BufferedReader reader) throws IOException {
 		Customer customer = null;
-		String fileName = "customer.txt";
-		BufferedReader customerReader = new BufferedReader(new FileReader(fileName));
+		BufferedReader customerReader = getCustomerReader();
 		
 		try {
 			while (true) {
@@ -82,8 +81,7 @@ public class CustomerHandler {
 	
 	public Customer searchCustomer2(String cName, BufferedReader reader) throws IOException {
 		Customer customer = null;
-		String fileName = "customer.txt";
-		BufferedReader customerReader = new BufferedReader(new FileReader(fileName));
+		BufferedReader customerReader = getCustomerReader();
 		String line;
 		String[] data;
 		while ((line = customerReader.readLine()) != null) {
@@ -108,6 +106,12 @@ public class CustomerHandler {
 			System.out.println("-----------------------------------------------------------------");
 		}
 		return customer;
+	}
+
+	private BufferedReader getCustomerReader() throws FileNotFoundException {
+		String fileName = "customer.txt";
+		BufferedReader customerReader = new BufferedReader(new FileReader(fileName));
+		return customerReader;
 	}
 	
 
