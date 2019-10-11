@@ -85,7 +85,7 @@ public class Customer extends DomainObject
 				//System.out.println(data[1]);
 				Manager manager = new Manager();
 				Customer customer = manager.cHandler.searchCustomer(data[1],manager.cHandler.getCustomerReader());
-				Tape tape = manager.searchTape(data[0]);
+				Tape tape = manager.mHandler.searchTape(data[0], manager.mHandler.getMovieReader());
 				int days = Integer.parseInt(data[2]);
 				rentalRecord = new Rental(tape, customer, days);
 				rentalVector.addElement(rentalRecord);

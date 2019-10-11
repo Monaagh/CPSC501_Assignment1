@@ -17,15 +17,17 @@ public class Manager extends DomainObject{
 	//String customerName = null;
 	//String phoneNumber = null;
 	//String email = null;
-	String movieName = null;
-	int movieCode = 0;
-	String tapeSN = null;
+	//String movieName = null;
+	//int movieCode = 0;
+	//String tapeSN = null;
 	BufferedReader reader;
 	CustomerHandler cHandler;
+	MovieHandler mHandler;
 	
 	public Manager() {
 		reader = new BufferedReader(new InputStreamReader(System.in));
 		cHandler = new CustomerHandler();
+		mHandler = new MovieHandler();
 	}
 	
 	
@@ -55,7 +57,8 @@ public class Manager extends DomainObject{
 					cHandler.addCustomer(reader);
 					cHandler.printInstruction(reader);
 				} else if (number == 2) {
-					addMovie();		
+					mHandler.addMovie(reader);
+					mHandler.printInstruction(reader);
 				} else if (number == 3) {
 					rentMovie();	
 				} else if (number == 4) {
@@ -74,78 +77,6 @@ public class Manager extends DomainObject{
 	}
 	
 	
-	
-	private void addMovie() throws IOException {
-		movieName = getMovieName(reader);		
-		movieCode = getMoviePriceCode(reader);		
-		tapeSN = getMovieSerialNumber(reader);	
-		
-		movie = new Movie(movieName, movieCode);
-		tape = new Tape(tapeSN, movie); 
-		tape.persist();
-		System.out.println("Tape added to the database");
-		System.out.println("-----------------------------------------------------------------");
-		System.out.println("Please press a key to continue.");
-		command = reader.readLine();
-		System.out.println("Please choose from the following commands by entering the number");
-	}
-
-
-	public String getMovieSerialNumber(BufferedReader reader) {
-		String sn = null;
-		try {
-			while (true) {
-				System.out.println("Enter tape's serial number:");
-				sn = reader.readLine();
-				if (!sn.isEmpty()) {
-					break;
-				}
-			}
-		} catch (IOException e) {
-				System.out.println("Exception:" + e);
-		}
-		
-		return sn;
-	}
-
-
-	public int getMoviePriceCode(BufferedReader reader) {
-		int code = 0;
-		try {
-			while (true) {
-				System.out.println("Enter movies's price code:");
-				String temp = reader.readLine();
-				
-				if (!temp.isEmpty()) {
-					code = Integer.parseInt(temp);
-					break;
-				}
-			}
-		} catch (IOException e) {
-				System.out.println("Exception:" + e);
-		}
-		
-		return code;
-	}
-
-
-	public String getMovieName(BufferedReader reader) {
-		String name = null;
-		try {
-			while (true) {
-				System.out.println("Enter movie's name:");
-				name = reader.readLine();
-				if (!name.isEmpty()) {
-					break;
-				}
-			}
-		} catch (IOException e) {
-				System.out.println("Exception:" + e);
-		}
-		
-		return name;
-	}
-
 
 	private void getCustomerWithOverdue() throws FileNotFoundException, IOException {
 		String fileName = "rental.txt";
@@ -156,6 +87,7 @@ public class Manager extends DomainObject{
 		String[] data;
 		int rentDays;
 		String nameCap;
+		String tapeSN;
 		while ((line = fileReader.readLine()) != null) {
 			data = line.split(",");
 			rentDays = Integer.parseInt(data[2]);
@@ -163,7 +95,7 @@ public class Manager extends DomainObject{
 			customerName = data[1];
 			if (rentDays > 10) {
 				customer = cHandler.searchCustomer(customerName, cHandler.getCustomerReader());
-				tape = searchTape(tapeSN);
+				tape = mHandler.searchTape(tapeSN, mHandler.getMovieReader());
 				nameCap = customer.name().substring(0,1).toUpperCase() + customer.name().substring(1);
 				int overdue = rentDays - 10;
 				System.out.print(nameCap + " has " + overdue + " days overdue for " + tape.movie().name());
@@ -181,11 +113,11 @@ public class Manager extends DomainObject{
 	}
 
 
-	
-
 
 	private void rentMovie() throws IOException {
 		customer = null;
+		tape = null;
+		String tapeSN;
 		while (customer == null) {
 			try {
 				while (true) {
@@ -206,18 +138,25 @@ public class Manager extends DomainObject{
 				System.out.println("Now you can rent a movie");
 			}
 		}
-		
-		try {
-			while (true) {
-				System.out.println("Enter tape's serial number:");
-				tapeSN = reader.readLine();
-				if (!tapeSN.isEmpty()) {
-					tape = searchTape(tapeSN);
-					break;
-				}			
+		while (tape == null) {
+			try {
+				while (true) {
+					System.out.println("Enter tape's serial number:");
+					tapeSN = reader.readLine();
+					if (!tapeSN.isEmpty()) {
+						tape = mHandler.searchTape(tapeSN, mHandler.getMovieReader());
+						break;
+					}			
+				}
+			} catch (IOException e) {
+					System.out.println("Exception:" + e);
 			}
-		} catch (IOException e) {
-				System.out.println("Exception:" + e);
+			
+			if (tape == null) {
+				System.out.println("You need to first add the movie to the database");
+				mHandler.addMovie(reader);
+				System.out.println("Now you can rent the movie");
+			}
 		}
 
 		rental = new Rental(tape,customer, 0);
@@ -229,43 +168,6 @@ public class Manager extends DomainObject{
 		System.out.println("Please choose from the following commands by entering the number");
 	}
 			
-	
-	
-	public Tape searchTape(String tapeSN) throws IOException {
-		Tape tape = null;
-		Movie movie = null;
-		String fileName = "tape.txt";
-		BufferedReader tapeReader = new BufferedReader(new FileReader(fileName));
-		//tapeReader = 
-		String line;
-		String[] data;
-		while ((line = tapeReader.readLine()) != null) {
-			data = line.split(",");
-			if (data[0].equals(tapeSN)) {
-				movie = new Movie(data[1], Integer.parseInt(data[2]));
-			    tape = new Tape(data[0], movie);
-			}
-				
-		}
-		
-		if (tape == null) {
-			System.out.println("This tape is not in the database, please enter following information to add the tape to the system:");
-			this.tapeSN = tapeSN;
-			movieName = getMovieName(reader);
-			
-			movieCode = getMoviePriceCode(reader);
-			
-			
-			movie = new Movie(movieName, movieCode);
-			tape = new Tape(tapeSN, movie); 
-			tape.persist();
-			System.out.println("Tape added to the database");
-			System.out.println("-----------------------------------------------------------------");
-
-		}
-		return tape;
-	}
-	
 
 	private void exit() {
 		System.exit(0);

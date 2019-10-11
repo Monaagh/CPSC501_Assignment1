@@ -7,11 +7,11 @@ package mypackage;
 import java.io.*;
 import mypackage.Customer;
 public class CustomerHandler {
-	String customerName = null;
-	String phoneNumber = null;
-	String email = null;
+	String customerName;
+	String phoneNumber;
+	String email;
 	String command;
-	Customer customer = null;
+	
 	
 	public CustomerHandler() {
 		customerName = null;
@@ -24,7 +24,7 @@ public class CustomerHandler {
 		phoneNumber = getCustomerPhone(reader);
 		email = getCustomerEmail(reader);	
 		
-		customer = new Customer(customerName, phoneNumber, email);
+		Customer customer = new Customer(customerName, phoneNumber, email);
 		customer.persist();
 		System.out.println("Customer added to the database");
 		System.out.println("-----------------------------------------------------------------");

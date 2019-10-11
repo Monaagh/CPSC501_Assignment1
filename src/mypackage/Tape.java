@@ -23,6 +23,7 @@ public class Tape extends DomainObject
 	}
 	
 	public void persist() {
-		Registrar.add ("Movies", this);
+		Registrar registrar = new Registrar();
+		registrar.add ("Movies", this);
 	}
 }

@@ -21,33 +21,11 @@ public class TestManager {
 	}
 	
 	@Test
-	public void testGetMovieName() {
-		String name = "Harry Poter";
-		InputStream stream = new ByteArrayInputStream(name.getBytes(StandardCharsets.UTF_8));
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-		String expectedName = manager.getMovieName(reader);
-		assertEquals(expectedName, name);
+	public void test() {
+		
 	}
 	
-	@Test
-	public void testGetMovieSerialNumber() {
-		String sn = "110";
-		InputStream stream = new ByteArrayInputStream(sn.getBytes(StandardCharsets.UTF_8));
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-		String expectedSN = manager.getMovieSerialNumber(reader);
-		assertEquals(expectedSN, sn);
-	}
-	
-	@Test
-	public void testGetMoviePriceCode() {
-		String code = "0";
-		InputStream stream = new ByteArrayInputStream(code.getBytes(StandardCharsets.UTF_8));
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-		int expectedCode = manager.getMoviePriceCode(reader);
-		assertEquals(expectedCode, Integer.parseInt(code));
-	}
-	
-	
+
 	@After
 	public void testAfter() {
 		
