@@ -18,8 +18,8 @@ public class Customer extends DomainObject
      public String email;
      public boolean redeem;
      public double award;
-     
-     private Vector<Rental> rentalVector = new Vector<Rental>();
+     Vector<Rental> rentalVector = new Vector<Rental>();
+    
      
 	public Customer(String name, String number, String email) {
         setName(name);
@@ -28,36 +28,21 @@ public class Customer extends DomainObject
         this.email = email;
     }
     public String getStatement() throws NumberFormatException, IOException {
-        String header = "Rental Record for " + name() + ":\n";
-
-        String result = getAmountOwed(header);
+    	String fileName = "rental.txt";
+    	String header = "Rental Record for " + name() + ":\n";
+    	
+		BufferedReader fileReader = new BufferedReader(new FileReader(fileName)); 
+        Vector<Rental> rentalVector = getRentalRecord(fileReader);
+        
+        String result = getAmountOwed(header, rentalVector);
         //add footer lines
         result +=  "\tAmount owed is " + String.valueOf(totalAmount) + "\n";
         result += "\tYou earned " + String.valueOf(frequentRenterPoints) + " frequent renter points";
         return result;
-
     }
-	private String getAmountOwed(String result) throws NumberFormatException, IOException {
+    
+	public String getAmountOwed(String result, Vector<Rental> rentalVector) throws NumberFormatException, IOException {
 		totalAmount=0;
-		
-		String fileName = "rental.txt";
-		BufferedReader fileReader = new BufferedReader(new FileReader(fileName));
-		String line;
-		String[] data;
-		while ((line = fileReader.readLine()) != null) {
-			data = line.split(",");
-			if (data[1].equals(this.name())) {
-				//System.out.println(data[1]);
-				Manager manager = new Manager();
-				Customer customer = manager.searchCustomer(data[1]);
-				Tape tape = manager.searchTape(data[0]);
-				int days = Integer.parseInt(data[2]);
-				//System.out.println(data[2]);
-				Rental rentalRecord = new Rental(tape, customer, days);
-				addRental(rentalRecord);
-			}
-				
-		}
 		
         Enumeration<Rental> rentals = rentalVector.elements();
 		while (rentals.hasMoreElements()) {
@@ -88,6 +73,29 @@ public class Customer extends DomainObject
 		}
 		return result;
 	}
+	
+	public Vector<Rental> getRentalRecord(BufferedReader fileReader) throws FileNotFoundException, IOException {
+		Vector<Rental> rentalVector = new Vector<Rental>();
+		Rental rentalRecord = null; 
+		String line;
+		String[] data;
+		while ((line = fileReader.readLine()) != null) {
+			data = line.split(",");
+			if (data[1].equals(this.name())) {
+				//System.out.println(data[1]);
+				Manager manager = new Manager();
+				Customer customer = manager.searchCustomer(data[1]);
+				Tape tape = manager.searchTape(data[0]);
+				int days = Integer.parseInt(data[2]);
+				rentalRecord = new Rental(tape, customer, days);
+				rentalVector.addElement(rentalRecord);
+			}		
+		}
+		
+		return rentalVector;
+	}
+	
+	
 	private void updateFreqPoints(Rental each) {
 		 // add frequent renter points
         frequentRenterPoints ++;
@@ -107,8 +115,9 @@ public class Customer extends DomainObject
 	}
 	
 	public void addRental(Rental arg) {
-    	rentalVector.addElement(arg);
+     	rentalVector.addElement(arg);
     }
+	
     public static Customer get(String name) {
     	return (Customer) Registrar.get("Customers", name);
     }

@@ -1,7 +1,13 @@
 package Test;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.Vector;
 import org.junit.Before;
 import org.junit.After;
 
@@ -37,8 +43,10 @@ public class TestCustomer {
 		
 		Customer john = new Customer("John Doe", "403", "John@gmail.com");
 		Rental rental = new Rental(tape1, john, 23);
-		john.addRental(rental);
-		john.getStatement();
+		Vector<Rental> vector = new Vector<Rental>();
+		vector.addElement(rental);
+		String temp = "";
+		john.getAmountOwed(temp, vector);
 		
 		assertEquals(33.5, john.totalAmount, 0.0001);
 		//assertNull(tape.movie());
@@ -49,8 +57,10 @@ public class TestCustomer {
 		
 		Customer john = new Customer("John Doe", "403", "John@gmail.com");
 		Rental rental = new Rental(tape1, john, 0);
-		john.addRental(rental);
-		john.getStatement();
+		Vector<Rental> vector = new Vector<Rental>();
+		vector.addElement(rental);
+		String temp = "";
+		john.getAmountOwed(temp, vector);
 		
 		assertEquals(2, john.totalAmount, 0.0001);
 
@@ -61,8 +71,10 @@ public class TestCustomer {
 		
 		Customer john = new Customer("John Doe", "403", "John@gmail.com");
 		Rental rental = new Rental(tape1, john, -2);
-		john.addRental(rental);
-		john.getStatement();
+		Vector<Rental> vector = new Vector<Rental>();
+		vector.addElement(rental);
+		String temp = "";
+		john.getAmountOwed(temp, vector);
 		
 		assertEquals(2, john.totalAmount, 0.0001);
 
@@ -74,9 +86,11 @@ public class TestCustomer {
 		Customer john = new Customer("John Doe", "403", "John@gmail.com");
 		Rental rental1 = new Rental(tape1, john, 23);
 		Rental rental2 = new Rental(tape2, john, 0);
-		john.addRental(rental1);
-		john.addRental(rental2);
-		john.getStatement();
+		Vector<Rental> vector = new Vector<Rental>();
+		vector.addElement(rental1);
+		vector.addElement(rental2);
+		String temp = "";
+		john.getAmountOwed(temp, vector);
 		
 		assertEquals(35.5, john.totalAmount, 0.0001);
 
@@ -86,11 +100,21 @@ public class TestCustomer {
 	public void testTotalAmountNoRental() throws NumberFormatException, IOException {
 		
 		Customer john = new Customer("John Doe", "403", "John@gmail.com");
-		//Rental rental1 = new Rental(tape1, john, 23);
-		//john.addRental(rental1);
 		john.getStatement();		
 		assertEquals(0, john.totalAmount, 0.0001);
 
+	}
+	
+	@Test
+	public void testGetRentalRecordNull() throws NumberFormatException, IOException {
+		Customer john = new Customer("John Doe", "403", "John@gmail.com");
+		String rentalFile = "";
+		InputStream stream = new ByteArrayInputStream(rentalFile.getBytes(StandardCharsets.UTF_8));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		Vector<Rental> vectorExpected  = john.getRentalRecord(reader);
+		Vector<Rental> vector = new Vector<Rental>();
+		assertEquals(vectorExpected,vector);
+		
 	}
 	
 	

@@ -10,15 +10,22 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import org.junit.Before;
 import org.junit.After;
-import static org.junit.Assert.fail;
-import static org.junit.Assert.assertTrue;
 
 public class TestCustomerHandler {
 	CustomerHandler chandler;
+	Movie movie1;
+	Movie movie2;
+	Tape tape1;
+	Tape tape2;
+	Rental rental;
 	
 	@Before
 	public void setUp() {
 		chandler = new CustomerHandler();
+		movie1 = new Movie("grudge", 0);
+		movie2 = new Movie("Harry Potter", 0);
+		tape1 = new Tape("123", movie1);
+		tape2 = new Tape("124", movie2);
 	}
 	
 	@Test
@@ -68,6 +75,7 @@ public class TestCustomerHandler {
 		Customer expectedCustomer = chandler.searchCustomer(name, reader);
 		assertNull(expectedCustomer);
 	}
+	
 		
 	@After
 	public void testAfter() {
