@@ -35,18 +35,22 @@ public class CustomerHandler {
 	
 	public void statement(BufferedReader reader) throws IOException {
 		Customer customer = null;
+		String fileName = "customer.txt";
+		BufferedReader customerReader = new BufferedReader(new FileReader(fileName));
+		
 		try {
 			while (true) {
 				System.out.println("Enter customer's name:");
 				customerName = reader.readLine();
 				if (!customerName.isEmpty() || customerName != null) {
-					customer = searchCustomer(customerName.toLowerCase());
+					customer = searchCustomer(customerName.toLowerCase(), customerReader);
 					break;
 				}			
 			}
 		} catch (IOException e) {
 				System.out.println("Exception:" + e);
 		}
+		 customerReader.close();
 		
 		if (customer != null) {
 			String statement = customer.getStatement();
@@ -58,21 +62,16 @@ public class CustomerHandler {
 			System.out.println("Please choose from the following commands by entering the number");
 	}
 	
-	public Customer searchCustomer(String cName) throws IOException {
+	public Customer searchCustomer(String cName, BufferedReader reader) throws IOException {
 		Customer customer = null;
-		String fileName = "customer.txt";
-		BufferedReader customerReader = new BufferedReader(new FileReader(fileName));
 		String line;
 		String[] data;
-		while ((line = customerReader.readLine()) != null) {
+		while ((line = reader.readLine()) != null) {
 			data = line.split(",");
 			if (data[0].equals(cName)) {
 				customer = new Customer(data[0], data[1], data[2]);
-			}
-				
+			}		
 		}
-		
-		customerReader.close();
 		
 		if (customer == null) {
 			System.out.println("Opps! This customer is not in the database");

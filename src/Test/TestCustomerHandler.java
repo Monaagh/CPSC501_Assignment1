@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import org.junit.Before;
 import org.junit.After;
 import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 public class TestCustomerHandler {
 	CustomerHandler chandler;
@@ -45,6 +46,27 @@ public class TestCustomerHandler {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 		String expectedEmail = chandler.getCustomerEmail(reader);
 		assertEquals(expectedEmail, email);
+	}
+	
+	@Test
+	public void testSearchCustomer() throws IOException {
+		String line = "adam,1234567,adam@gmail.com";
+		String name = "adam";
+		InputStream stream = new ByteArrayInputStream(line.getBytes(StandardCharsets.UTF_8));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		Customer expectedCustomer = chandler.searchCustomer(name, reader);
+		assertTrue(expectedCustomer instanceof Customer);
+		assertEquals(expectedCustomer.name(), name);
+	}
+	
+	@Test
+	public void testSearchCustomerNull() throws IOException {
+		String line = " ";
+		String name = "adam";
+		InputStream stream = new ByteArrayInputStream(line.getBytes(StandardCharsets.UTF_8));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		Customer expectedCustomer = chandler.searchCustomer(name, reader);
+		assertNull(expectedCustomer);
 	}
 		
 	@After
