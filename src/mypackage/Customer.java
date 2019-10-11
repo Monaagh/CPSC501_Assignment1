@@ -84,7 +84,7 @@ public class Customer extends DomainObject
 			if (data[1].equals(this.name())) {
 				//System.out.println(data[1]);
 				Manager manager = new Manager();
-				Customer customer = manager.searchCustomer(data[1]);
+				Customer customer = manager.cHandler.searchCustomer2(data[1],manager.reader);
 				Tape tape = manager.searchTape(data[0]);
 				int days = Integer.parseInt(data[2]);
 				rentalRecord = new Rental(tape, customer, days);

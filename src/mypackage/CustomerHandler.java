@@ -79,6 +79,37 @@ public class CustomerHandler {
 			
 		return customer;
 	}
+	
+	public Customer searchCustomer2(String cName, BufferedReader reader) throws IOException {
+		Customer customer = null;
+		String fileName = "customer.txt";
+		BufferedReader customerReader = new BufferedReader(new FileReader(fileName));
+		String line;
+		String[] data;
+		while ((line = customerReader.readLine()) != null) {
+			data = line.split(",");
+			if (data[0].equals(cName)) {
+				customer = new Customer(data[0], data[1], data[2]);
+			}
+				
+		}
+		
+		if (customer == null) {
+			System.out.println("This customer is not in the database, please enter following information to add the customer to the system:");
+			String customerName = cName;
+			
+			String phoneNumber = getCustomerPhone(reader);
+			
+			String email  = getCustomerEmail(reader);
+				
+			customer = new Customer(customerName, phoneNumber, email);
+			customer.persist();
+			System.out.println("Customer added to the database");
+			System.out.println("-----------------------------------------------------------------");
+		}
+		return customer;
+	}
+	
 
 	public String getCustomerName(BufferedReader reader) {
 		String name = null;

@@ -149,6 +149,7 @@ public class Manager extends DomainObject{
 	private void getCustomerWithOverdue() throws FileNotFoundException, IOException {
 		String fileName = "rental.txt";
 		String customerName;
+		
 		fileReader = new BufferedReader(new FileReader(fileName));
 		String line;
 		String[] data;
@@ -160,7 +161,7 @@ public class Manager extends DomainObject{
 			tapeSN = data[0];
 			customerName = data[1];
 			if (rentDays > 10) {
-				customer = searchCustomer(customerName);
+				customer = cHandler.searchCustomer2(customerName, reader);
 				tape = searchTape(tapeSN);
 				nameCap = customer.name().substring(0,1).toUpperCase() + customer.name().substring(1);
 				int overdue = rentDays - 10;
@@ -188,7 +189,7 @@ public class Manager extends DomainObject{
 				System.out.println("Enter customer's name:");
 				String customerName = reader.readLine();
 				if (!customerName.isEmpty()) {
-					customer = searchCustomer(customerName.toLowerCase());
+					customer = cHandler.searchCustomer2(customerName.toLowerCase(), reader);
 					break;
 				}			
 			}
@@ -217,37 +218,7 @@ public class Manager extends DomainObject{
 		command = reader.readLine();
 		System.out.println("Please choose from the following commands by entering the number");
 	}
-				
-	
-	public Customer searchCustomer(String cName) throws IOException {
-		Customer customer = null;
-		String fileName = "customer.txt";
-		BufferedReader customerReader = new BufferedReader(new FileReader(fileName));
-		String line;
-		String[] data;
-		while ((line = customerReader.readLine()) != null) {
-			data = line.split(",");
-			if (data[0].equals(cName)) {
-				customer = new Customer(data[0], data[1], data[2]);
-			}
-				
-		}
-		
-		if (customer == null) {
-			System.out.println("This customer is not in the database, please enter following information to add the customer to the system:");
-			String customerName = cName;
 			
-			String phoneNumber = cHandler.getCustomerPhone(reader);
-			
-			String email = cHandler.getCustomerEmail(reader);
-				
-			customer = new Customer(customerName, phoneNumber, email);
-			customer.persist();
-			System.out.println("Customer added to the database");
-			System.out.println("-----------------------------------------------------------------");
-		}
-		return customer;
-	}
 	
 	
 	public Tape searchTape(String tapeSN) throws IOException {
