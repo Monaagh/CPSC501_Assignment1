@@ -66,6 +66,7 @@ public class Customer extends DomainObject
                     break;
 
             }
+            
             totalAmount += thisAmount;
             updateFreqPoints(each);					//added method
             //show figures for this rental
