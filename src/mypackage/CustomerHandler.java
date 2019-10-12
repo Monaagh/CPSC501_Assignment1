@@ -50,8 +50,8 @@ public class CustomerHandler extends Handler {
 		 customerReader.close();
 		
 		if (customer != null) {
-			//String statement = customer.getStatement();
-			System.out.println(customer.getStatement());
+			String statement = customer.getStatement();
+			System.out.println(statement);
 		}
 			System.out.println("-----------------------------------------------------------------");
 			printInstruction(reader);

@@ -21,8 +21,8 @@ public class Registrar {
 		try {
 			String fileCustomer = "customer.txt";
 			String cName = customer.getName();
-			String cNumber = customer.number;
-			String cEmail = customer.email;
+			String cNumber = customer.getNumber();
+			String cEmail = customer.getEmail();
 			
 			writer = new BufferedWriter(new FileWriter(fileCustomer, true));
 			writer.write(cName + "," + cNumber + "," + cEmail);

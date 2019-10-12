@@ -100,8 +100,8 @@ public class Manager extends DomainObject{
 				int overdue = rentDays - 10;
 				System.out.print(nameCap + " has " + overdue + " days overdue for " + tape.movie().name());
 				System.out.println(". The contact information is:");
-				System.out.println("\tEmail: " + customer.email);
-				System.out.println("\tPhone Number: " + customer.number);
+				System.out.println("\tEmail: " + customer.getEmail());
+				System.out.println("\tPhone Number: " + customer.getNumber());
 				System.out.println("-----------------------------------------------------------------");
 				
 			}

@@ -34,8 +34,8 @@ public class TestCustomer {
 	public void testName() {
 		Customer john = new Customer("John Doe", "403", "John@gmail.com");
 		assertEquals("John Doe", john.name());
-		assertEquals("403", john.number);
-		assertEquals("John@gmail.com", john.email);
+		assertEquals("403", john.getNumber());
+		assertEquals("John@gmail.com", john.getEmail());
 	}
 	
 	@Test
@@ -48,7 +48,7 @@ public class TestCustomer {
 		String temp = "";
 		john.getAmountOwed(temp, vector);
 		
-		assertEquals(33.5, john.totalAmount, 0.0001);
+		assertEquals(33.5, john.getTotalAmount(), 0.0001);
 		//assertNull(tape.movie());
 	}
 	
@@ -62,7 +62,7 @@ public class TestCustomer {
 		String temp = "";
 		john.getAmountOwed(temp, vector);
 		
-		assertEquals(2, john.totalAmount, 0.0001);
+		assertEquals(2, john.getTotalAmount(), 0.0001);
 
 	}
 	
@@ -76,7 +76,7 @@ public class TestCustomer {
 		String temp = "";
 		john.getAmountOwed(temp, vector);
 		
-		assertEquals(2, john.totalAmount, 0.0001);
+		assertEquals(2, john.getTotalAmount(), 0.0001);
 
 	}
 	
@@ -92,7 +92,7 @@ public class TestCustomer {
 		String temp = "";
 		john.getAmountOwed(temp, vector);
 		
-		assertEquals(35.5, john.totalAmount, 0.0001);
+		assertEquals(35.5, john.getTotalAmount(), 0.0001);
 
 	}
 	
@@ -101,7 +101,7 @@ public class TestCustomer {
 		
 		Customer john = new Customer("John Doe", "403", "John@gmail.com");
 		john.getStatement();		
-		assertEquals(0, john.totalAmount, 0.0001);
+		assertEquals(0, john.getTotalAmount(), 0.0001);
 
 	}
 	

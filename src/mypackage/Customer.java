@@ -12,13 +12,13 @@ import java.util.Vector;
 
 public class Customer extends DomainObject
     {
-	 public double totalAmount;
-     public int frequentRenterPoints = 0;
-     public String number;
-     public String email;
-     public boolean redeem;
-     public double award;
-     Vector<Rental> rentalVector = new Vector<Rental>();
+	 private double totalAmount;
+     private int frequentRenterPoints = 0;
+     private String number;
+     private String email;
+     private boolean redeem;
+     private double award;
+     private Vector<Rental> rentalVector = new Vector<Rental>();
     
      
 	public Customer(String name, String number, String email) {
@@ -131,6 +131,26 @@ public class Customer extends DomainObject
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getNumber() {
+		return number;
+	}
+	
+	public void setNumber(String aNumber) {
+		 number = aNumber;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
+	public void setEmail(String anEmail) {
+		 email = anEmail;
+	}
+	
+	public double getTotalAmount() {
+		return totalAmount;
 	}
 	
     }
